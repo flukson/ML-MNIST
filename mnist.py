@@ -10,3 +10,7 @@ if __name__ == '__main__':
   print("1. Downloading data:")
   prepare_data.downloadData(data_subdirectory)
   print()
+
+  print("2. Unpacking data:")
+  prepare_data.unpackData(data_subdirectory)
+  print()
