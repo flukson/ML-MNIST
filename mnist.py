@@ -6,6 +6,7 @@
 # https://www.codementor.io/@dejanbatanjac/pytorch-the-missing-manual-on-loading-mnist-dataset-wjeh5top7
 # https://nextjournal.com/gkoehler/pytorch-mnist
 
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
@@ -15,10 +16,12 @@ import torchvision.transforms as transforms
 
 data_subdirectory = "./data/"
 
-bs = 512
+batch_size_train = 64
+batch_size_test = 1000
 learning_rate = 0.01
 momentum = 0.5
-n_epochs = 3
+n_epochs = 20
+log_interval = 10
 
 t = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=(0), std=(1))])
 
@@ -45,8 +48,8 @@ if __name__ == '__main__':
   mnist_trainset = datasets.MNIST(root=data_subdirectory, train=True, download=True, transform=t)
   mnist_testset = datasets.MNIST(root=data_subdirectory, train=False, download=True, transform=t)
 
-  train_loader = DataLoader(mnist_trainset, batch_size=bs, drop_last=True, shuffle=True)
-  test_loader = DataLoader(mnist_testset, batch_size=bs, drop_last=True, shuffle=True)
+  train_loader = DataLoader(mnist_trainset, batch_size=batch_size_train, drop_last=True, shuffle=True)
+  test_loader = DataLoader(mnist_testset, batch_size=batch_size_test, drop_last=True, shuffle=True)
 
   # Initialize the network and the optimizer:
   network = NeuralNetwork()
@@ -72,8 +75,8 @@ if __name__ == '__main__':
         train_losses.append(loss.item())
         train_counter.append(
           (batch_idx*64) + ((epoch-1)*len(train_loader.dataset)))
-        torch.save(network.state_dict(), '/results/model.pth')
-        torch.save(optimizer.state_dict(), '/results/optimizer.pth')
+        torch.save(network.state_dict(), './results/model.pth')
+        torch.save(optimizer.state_dict(), './results/optimizer.pth')
 
   def test():
     network.eval()
@@ -90,3 +93,9 @@ if __name__ == '__main__':
     print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
       test_loss, correct, len(test_loader.dataset),
       100. * correct / len(test_loader.dataset)))
+
+  # Run the training:
+  test() # this one is to evaluate model with randomly initialized parameters
+  for epoch in range(1, n_epochs + 1):
+    train(epoch)
+    test()
