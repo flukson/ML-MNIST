@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 # Solution based on following tutorials:
-# https://www.aiworkbox.com/lessons/load-mnist-dataset-from-pytorch-torchvision
-# https://www.codementor.io/@dejanbatanjac/pytorch-the-missing-manual-on-loading-mnist-dataset-wjeh5top7
-# https://nextjournal.com/gkoehler/pytorch-mnist
+# [1] https://www.aiworkbox.com/lessons/load-mnist-dataset-from-pytorch-torchvision
+# [2] https://nextjournal.com/gkoehler/pytorch-mnist
+# [3] https://www.codementor.io/@dejanbatanjac/pytorch-the-missing-manual-on-loading-mnist-dataset-wjeh5top7
+#     -> here instructions about cuda (not implemented in this project yet)
 
 import argparse
+from numpy import column_stack, savetxt
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torchvision.datasets as datasets
@@ -26,7 +28,7 @@ momentum = 0.5
 # are used once to update the weights. For batch training all of the training
 # samples pass through the learning algorithm simultaneously in one epoch before
 # weights are updated.
-n_epochs = 2
+n_epochs = 2 # tmp, change to 10
 
 t = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=(0), std=(1))])
 
@@ -66,11 +68,15 @@ if __name__ == '__main__':
     loss = test(network, test_loader) # this one is to evaluate model with randomly initialized parameters
     test_losses.append(loss)
     for epoch in range(1, n_epochs + 1):
-      loss, counter = train(network, epoch, train_loader, optimizer)
-      train_losses.append(loss)
-      train_counter.append(counter)
+      losses, counters = train(network, epoch, train_loader, optimizer)
+      train_losses += losses
+      train_counter += counters
       loss = test(network, test_loader)
       test_losses.append(loss)
+
+    # Saving losses data to files:
+    savetxt(results_subdirectory + 'train_losses.txt', column_stack((train_counter, train_losses)))
+    savetxt(results_subdirectory + 'test_losses.txt', column_stack((test_counter, test_losses)))
 
   elif args.mode == "plot":
 

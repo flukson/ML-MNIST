@@ -3,9 +3,13 @@ import torch.nn.functional as F
 
 log_interval = 10
 
+results_subdirectory = "./results/"
+
 def train(network, epoch, data_loader, optimizer):
 
   network.train()
+  losses = []
+  counters = []
   for batch_idx, (data, target) in enumerate(data_loader):
     optimizer.zero_grad()
     output = network(data)
@@ -18,9 +22,11 @@ def train(network, epoch, data_loader, optimizer):
         100. * batch_idx / len(data_loader), loss.item()))
       loss = loss.item()
       counter = batch_idx*64 + (epoch-1)*len(data_loader.dataset)
-      torch.save(network.state_dict(), './results/model.pth')
-      torch.save(optimizer.state_dict(), './results/optimizer.pth')
-  return loss, counter
+      losses.append(loss)
+      counters.append(counter)
+      torch.save(network.state_dict(), results_subdirectory + 'model.pth')
+      torch.save(optimizer.state_dict(), results_subdirectory + 'optimizer.pth')
+  return losses, counters
 
 def test(network, data_loader):
 
