@@ -1,6 +1,7 @@
 FROM python:3
 ADD data/ /data/
 ADD modules/*.py /modules/
+ADD results/ /results/
 ADD mnist.py /
-RUN pip install requests
+RUN pip3 install torch torchvision
 CMD [ "python3", "-u", "./mnist.py" ]
