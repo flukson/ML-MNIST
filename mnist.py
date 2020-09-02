@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from modules import prepare_data
+import torchvision.datasets as datasets
 
 data_subdirectory = "./data/"
 
 if __name__ == '__main__':
 
-  print("1. Downloading data:")
-  prepare_data.downloadData(data_subdirectory)
+  # https://www.aiworkbox.com/lessons/load-mnist-dataset-from-pytorch-torchvision
+  print("1. Loading MNIST dataset")
+  mnist_trainset = datasets.MNIST(root=data_subdirectory, train=True, download=True, transform=None)
+  mnist_testset = datasets.MNIST(root=data_subdirectory, train=False, download=True, transform=None)
   print()
 
-  print("2. Unpacking data:")
-  prepare_data.unpackData(data_subdirectory)
-  print()
