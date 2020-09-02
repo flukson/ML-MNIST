@@ -8,7 +8,10 @@
 #     -> here instructions about cuda (not implemented in this project yet)
 
 import argparse
-from numpy import column_stack, savetxt
+from matplotlib import rcParams
+import matplotlib.pyplot as plt
+from numpy import column_stack, loadtxt, savetxt
+from os.path import exists
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torchvision.datasets as datasets
@@ -33,6 +36,9 @@ n_epochs = 2 # tmp, change to 10
 t = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=(0), std=(1))])
 
 if __name__ == '__main__':
+
+  rcParams['font.size'] = 24
+  rcParams['legend.fontsize'] = 16
 
   parser = argparse.ArgumentParser(description='Analyze coincidences file and plot results of the analysis',
                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -80,7 +86,30 @@ if __name__ == '__main__':
 
   elif args.mode == "plot":
 
-    ""
+    train_results_path = results_subdirectory + 'train_losses.txt'
+    test_results_path = results_subdirectory + 'test_losses.txt'
+
+    if exists(train_results_path) and exists(test_results_path):
+
+      train_results = loadtxt(train_results_path)
+      test_results = loadtxt(test_results_path)
+
+      fig = plt.figure(figsize=(8, 6))
+      ax = fig.add_subplot(111)
+      plt.subplots_adjust(left=0.16, right=0.96, top=0.91, bottom=0.17)
+      plt.plot(train_results[:,0], train_results[:,1], label="train loss")
+      plt.plot(test_results[:,0], test_results[:,1], 'o', label="test loss")
+      plt.title("Losses")
+      plt.xlabel("Counter")
+      plt.ylabel("Loss")
+      plt.legend(loc=1)
+      #plt.ylim(ymin=0)
+      plt.savefig(results_subdirectory + "losses.png")
+      plt.clf()
+
+    else:
+
+      print("Firstly use the calculate mode: ./mnist.py --m calculate")
 
   else:
 
