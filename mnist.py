@@ -27,12 +27,6 @@ batch_size_test = 1000
 learning_rate = 0.01
 momentum = 0.5
 
-# An epoch is a measure of the number of times all of the training vectors
-# are used once to update the weights. For batch training all of the training
-# samples pass through the learning algorithm simultaneously in one epoch before
-# weights are updated.
-n_epochs = 2 # tmp, change to 10
-
 t = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=(0), std=(1))])
 
 if __name__ == '__main__':
@@ -48,6 +42,16 @@ if __name__ == '__main__':
                       type=str,
                       default='calculate',
                       help='mode of the script: calculate, plot')
+
+  # An epoch is a measure of the number of times all of the training vectors
+  # are used once to update the weights. For batch training all of the training
+  # samples pass through the learning algorithm simultaneously in one epoch before
+  # weights are updated.
+  parser.add_argument('-e', '--epochs',
+                      dest='epochs',
+                      type=int,
+                      default=10,
+                      help='epochs')
 
   args = parser.parse_args()
 
@@ -68,12 +72,12 @@ if __name__ == '__main__':
     train_losses = []
     train_counter = []
     test_losses = []
-    test_counter = [i*len(train_loader.dataset) for i in range(n_epochs + 1)]
+    test_counter = [i*len(train_loader.dataset) for i in range(args.epochs + 1)]
 
     # Run the training:
     loss = test(network, test_loader) # this one is to evaluate model with randomly initialized parameters
     test_losses.append(loss)
-    for epoch in range(1, n_epochs + 1):
+    for epoch in range(1, args.epochs + 1):
       losses, counters = train(network, epoch, train_loader, optimizer)
       train_losses += losses
       train_counter += counters
@@ -103,7 +107,6 @@ if __name__ == '__main__':
       plt.xlabel("Counter")
       plt.ylabel("Loss")
       plt.legend(loc=1)
-      #plt.ylim(ymin=0)
       plt.savefig(results_subdirectory + "losses.png")
       plt.clf()
 
