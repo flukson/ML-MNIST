@@ -50,4 +50,9 @@ docker run mnist
 
 ## Results
 
+Results after 10 epochs for the test set:
+- Avg. loss: 0.0748,
+- Accuracy: 9778/10000 (98%).
+
 ![Losses for 10 epochs](results/losses_10epochs.jpg)
+

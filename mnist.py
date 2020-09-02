@@ -103,11 +103,10 @@ if __name__ == '__main__':
       plt.subplots_adjust(left=0.16, right=0.96, top=0.91, bottom=0.17)
       plt.plot(train_results[:,0], train_results[:,1], label="train loss")
       plt.plot(test_results[:,0], test_results[:,1], 'o', label="test loss")
-      plt.title("Losses")
-      plt.xlabel("Counter")
-      plt.ylabel("Loss")
+      plt.xlabel("Number of training examples seen")
+      plt.ylabel("Negative log likelihood loss")
       plt.legend(loc=1)
-      plt.savefig(results_subdirectory + "losses.png")
+      plt.savefig(results_subdirectory + "losses.jpg")
       plt.clf()
 
     else:
