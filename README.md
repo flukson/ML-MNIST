@@ -47,3 +47,7 @@ and then run it:
 ```
 docker run mnist
 ```
+
+## Results
+
+![Losses for 10 epochs](results/losses_10epochs.jpg)
