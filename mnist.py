@@ -22,6 +22,10 @@ from neural_network_helper import *
 
 data_subdirectory = "./data/"
 
+# The number of training examples used in the estimate of the error gradient
+# is a hyperparameter for the learning algorithm called the “batch size,” or simply the “batch.”
+# A batch size of 32 means that 32 samples from the training dataset will be used
+# to estimate the error gradient before the model weights are updated.
 batch_size_train = 64
 batch_size_test = 1000
 learning_rate = 0.01
