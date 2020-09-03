@@ -21,7 +21,7 @@ class NeuralNetwork(nn.Module):
     # outputting 20 convolutional features, with a square kernel size of 5
     self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
 
-    # Dropout layer to prevent overfitting
+    # Dropout layer to prevent overfitting (regularization)
     self.conv2_drop = nn.Dropout2d()
 
     # First fully connected layer

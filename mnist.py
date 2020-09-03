@@ -67,6 +67,10 @@ if __name__ == '__main__':
 
     # Initialize the network and the optimizer:
     network = NeuralNetwork()
+    # SGD - stochastic gradient descent optimizer
+    # Gradient descent is a first-order iterative optimization algorithm
+    # for finding a local minimum of a differentiable function.
+    # https://en.wikipedia.org/wiki/Gradient_descent
     optimizer = optim.SGD(network.parameters(), lr=learning_rate, momentum=momentum)
 
     train_losses = []

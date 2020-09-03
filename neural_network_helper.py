@@ -5,6 +5,11 @@ log_interval = 10
 
 results_subdirectory = "./results/"
 
+# Understanding different Loss Functions for Neural Networks:
+# https://towardsdatascience.com/understanding-different-loss-functions-for-neural-networks-dd1ed0274718
+# Loss is nothing but a prediction error of Neural Net.
+# And the method to calculate the loss is called Loss Function.
+
 def train(network, epoch, data_loader, optimizer):
 
   network.train()
